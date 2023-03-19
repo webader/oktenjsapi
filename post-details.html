@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>post-details</title>
+</head>
+<body>
+<h2>post-details.html</h2>
+
+
+<script>
+    let url = new URL(location.href);
+    let json = url.searchParams.get('data');
+    let post = JSON.parse(json);
+
+    let div = document.createElement('div');
+    document.body.appendChild(div);
+    console.log(post);
+    div.innerHTML = `
+    <p><i>userId</i>: ${post.userId}</p>
+    <p><i>title</i>: ${post.title}</p>
+    <p><i>id</i>: ${post.id}</p>
+    <p><i>text</i>: ${post.body}</p>
+    `;
+
+    // На странице post-details.html:
+    // 7 Вивести всю, без виключення, інформацію про об'єкт post на який клікнули .
+    // 8 Нижчє інформаці про пост, вивести всі коментарі поточного поста (ендпоінт  - https://jsonplaceholder.typicode.com/posts/POST_ID/comments)
+
+    let urlPost = new URL('https://jsonplaceholder.typicode.com/posts/'+`${post.id}/comments`)
+    fetch(urlPost)
+        .then(value => value.json())
+        .then(comments => {
+            for (const comment of comments) {
+                console.log(comment)
+                let div = document.createElement('div');
+                document.body.appendChild(div);
+                div.innerHTML = `
+                        <p>comment post id: ${comment.postId}</p>
+                        <p>comment name: ${comment.name}</p>
+                        <p>comment id: ${comment.id}</p>
+                        <p>comment email: ${comment.email}</p>
+                        <p>comment body: ${comment.body}</p>
+                    `
+            }
+        })
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+<h2>user-details.html</h2>
+
+<script>
+    let url = new URL(location.href);
+    let json = url.searchParams.get('data');
+    let user = JSON.parse(json);
+
+    let div = document.createElement('div');
+    document.body.appendChild(div);
+    div.innerText = `
+        id - ${user.id}
+        name - ${user.name}
+        username - ${user.username}
+        email - ${user.email}
+            User address:
+                city -${user.address.city}
+                geo
+                    lat: ${user.address.geo.lat} lng: ${user.address.geo.lng}
+                street -${user.address.street}
+                suite -${user.address.suite}
+                zipcode -${user.address.zipcode}
+            User company:
+                company name - ${user.company.name}
+                company catchPhrase - ${user.company.catchPhrase}
+                company bs - ${user.company.bs}
+        phone - ${user.phone}
+        website - ${user.website}
+    `
+    let button = document.createElement('button');
+    div.appendChild(button)
+    // let a = document.createElement('a');
+    // button.appendChild(a);
+    button.innerText = `post of current user`;
+    //a.href=`https://jsonplaceholder.typicode.com/users/${user.id}/posts`;
+
+    button.addEventListener('click', function() {
+        let urlPost = new URL('https://jsonplaceholder.typicode.com/users/'+`${user.id}/posts`)
+        fetch(urlPost)
+            .then(value => value.json())
+            .then(posts => {
+                for (const post of posts) {
+                    console.log(post.title)
+                    let div = document.createElement('div');
+                    document.body.appendChild(div);
+                    div.innerHTML = `
+                        <p>title post of user ${user.id}: ${post.title} </p>
+                    `
+                    let button = document.createElement('button');
+                    div.appendChild(button);
+                    let a = document.createElement('a');
+                    button.appendChild(a);
+                    a.innerText = 'More info this post ...';
+                    a.href='post-details.html?data=' + JSON.stringify(post);
+
+
+                }
+            })
+
+
+    })
+
+
+
+
+</script>
+
+</body>
+</html>
